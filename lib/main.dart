@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mysample/search.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,20 +20,20 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       theme: ThemeData(useMaterial3: true),
       home: Scaffold(
-        body: const [
+        body: SafeArea(
+            child: const [
+          // Select pages as _currentPageIndex changes
           Center(
             child: Text('Home'),
           ),
           Center(
             child: Text('Timetable'),
           ),
-          Center(
-            child: Text('Search'),
-          ),
+          SearchPage(),
           Center(
             child: Text('More'),
           )
-        ][_currentPageIndex],
+        ][_currentPageIndex]),
         bottomNavigationBar: NavigationBar(
           selectedIndex: _currentPageIndex,
           destinations: const <NavigationDestination>[
