@@ -17,9 +17,6 @@ import 'lecture_sample.dart';
 
       year -= 1;
       lectureNumber = sample[i].previousLecture;
-
-      print('year: $year');
-      print('previous: $lectureNumber');
     }
   }
 

@@ -33,21 +33,38 @@ class _SearchPageState extends State<SearchPage> {
         );
   }
 
+  void updateList(String value) {
+    setState(() {
+      tileList = sample.where((element) => element.lectureName.toLowerCase().contains(value.toLowerCase())).toList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
       slivers: [
-        SliverPadding(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          sliver: SliverAppBar(
-            title: SearchAnchor.bar(
-              barHintText: 'Search lectures',
-              suggestionsBuilder: (context, controller) =>
-                  getSuggestions(controller),
+        // SliverPadding(
+        //   padding: const EdgeInsets.symmetric(vertical: 10),
+        //   sliver: SliverAppBar(
+        //     title: SearchAnchor.bar(
+        //       barHintText: 'Search lectures',
+        //       suggestionsBuilder: (context, controller) =>
+        //           getSuggestions(controller),
+        //     ),
+        //     clipBehavior: Clip.none,
+        //   ),
+        // ),
+        SliverToBoxAdapter(
+          child: TextField(
+            onChanged: (value) => updateList(value),
+            decoration: const InputDecoration(
+              prefixIcon: Icon(
+                Icons.search,
+              ),
             ),
-            clipBehavior: Clip.none,
           ),
         ),
+
         SliverList(
           delegate: SliverChildBuilderDelegate(
             (context, index) => ListTile(
