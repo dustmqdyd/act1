@@ -4,14 +4,13 @@ import 'lecture_sample.dart';
 (List<LectureModel>, int) filter(LectureModel startPoint) {
   List<LectureModel> filtered = [];
 
-  int startYear = startPoint.year;
-  int startNumber = startPoint.lectureNumber;
-  int startIndex = sample.indexOf(startPoint);
+  final int startIndex = sample.indexOf(startPoint);
+  final int startYear = startPoint.year;
 
   int year = startYear - 1;
-  int lectureNumber = startPoint.followingLecture;
+  int lectureNumber = startPoint.previousLecture;
 
-  for (int i = startIndex -1; i > -1; i--) {
+  for (int i = startIndex - 1; i > -1; i--) {
     if (sample[i].year == year && sample[i].lectureNumber == lectureNumber) {
       filtered.insert(0, sample[i]);
 
@@ -23,7 +22,7 @@ import 'lecture_sample.dart';
   filtered.add(startPoint);
   int initialPage = filtered.length - 1;
   year = startYear + 1;
-  lectureNumber = startNumber;
+  lectureNumber = startPoint.followingLecture;
 
   for (int i = startIndex + 1; i < sample.length; i++) {
     if (sample[i].year == year && sample[i].lectureNumber == lectureNumber) {
