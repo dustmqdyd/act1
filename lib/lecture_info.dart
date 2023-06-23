@@ -36,6 +36,8 @@ class _LectureInfoState extends State<LectureInfo> {
                     fontSize: 30.0,
                     fontWeight: FontWeight.bold,
                   ),
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
                 ),
                 Text(
                   '(${widget.lecture.year.toString()})',
@@ -51,25 +53,49 @@ class _LectureInfoState extends State<LectureInfo> {
                     children: [
                       Row(
                         children: [
-                          const Text('Lecture No. '),
+                          const Text(
+                            'Lecture No. ',
+                            style: TextStyle(
+                              fontSize: 18,
+                            ),
+                          ),
                           Text(
                             widget.lecture.lectureNumber.toString(),
+                            style: const TextStyle(
+                              fontSize: 18,
+                            ),
                           ),
                         ],
                       ),
                       Row(
                         children: [
-                          const Text('Lecture type: '),
+                          const Text(
+                            'Lecture type: ',
+                            style: TextStyle(
+                              fontSize: 18,
+                            ),
+                          ),
                           Text(
-                            widget.lecture.isCompulsory! ? 'Major' : 'GE',
+                            widget.lecture.isCompulsory ? 'Major' : 'GE',
+                            style: const TextStyle(
+                              fontSize: 18,
+                            ),
                           ),
                         ],
                       ),
                       Row(
                         children: [
-                          const Text('Credit: '),
+                          const Text(
+                            'Credit: ',
+                            style: TextStyle(
+                              fontSize: 18,
+                            ),
+                          ),
                           Text(
                             widget.lecture.credit.toString(),
+                            style: const TextStyle(
+                              fontSize: 18,
+                            ),
                           ),
                         ],
                       ),
@@ -78,6 +104,34 @@ class _LectureInfoState extends State<LectureInfo> {
                 ),
               ],
             ),
+          ),
+        ),
+        SizedBox(
+          height: 100,
+          width: double.infinity,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index) => SizedBox(
+              width: MediaQuery.of(context).size.width / 2.5,
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  side: const BorderSide(
+                    color: Colors.black,
+                  ),
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+                child: Column(
+                  children: [
+                    const IconButton(
+                      onPressed: null,
+                      icon: Icon(Icons.favorite),
+                    ),
+                    Text('Prof. $index'),
+                  ],
+                ),
+              ),
+            ),
+            itemCount: 3,
           ),
         ),
       ],
