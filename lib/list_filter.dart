@@ -1,5 +1,5 @@
-import 'lecture_model.dart';
-import 'lecture_sample.dart';
+import 'package:mysample/model/lecture_model.dart';
+import 'package:mysample/lecture_sample.dart';
 
 (List<LectureModel>, int) filter(LectureModel startPoint) {
   List<LectureModel> filtered = [];
@@ -31,10 +31,6 @@ import 'lecture_sample.dart';
       year += 1;
       lectureNumber = sample[i].followingLecture;
     }
-  }
-
-  for (var elem in filtered) {
-    print(elem.lectureNumber);
   }
 
   return (filtered, initialPage);

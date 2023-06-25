@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:mysample/lecture_model.dart';
+import 'package:mysample/model/lecture_model.dart';
 
 class LectureInfo extends StatefulWidget {
   const LectureInfo(this.lecture, {super.key});
@@ -40,7 +40,7 @@ class _LectureInfoState extends State<LectureInfo> {
                   maxLines: 2,
                 ),
                 Text(
-                  '(${widget.lecture.year.toString()})',
+                  '| ${widget.lecture.year.toString()} - ${widget.lecture.semester.toString()} |',
                   style: const TextStyle(
                     fontSize: 15.0,
                     fontWeight: FontWeight.bold,
@@ -106,28 +106,24 @@ class _LectureInfoState extends State<LectureInfo> {
             ),
           ),
         ),
-        SizedBox(
-          height: 100,
-          width: double.infinity,
+        Expanded(
           child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index) => SizedBox(
-              width: MediaQuery.of(context).size.width / 2.5,
-              child: Card(
+            itemBuilder: (context, index) => Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: ListTile(
+                leading: CircleAvatar(
+                  child: Text(
+                    (index + 1).toString(),
+                  ),
+                ),
+                title: const Text('Prof. '),
+                subtitle: const Text('Class '),
+                trailing: const Icon(Icons.favorite_border),
                 shape: RoundedRectangleBorder(
                   side: const BorderSide(
                     color: Colors.black,
                   ),
-                  borderRadius: BorderRadius.circular(12.0),
-                ),
-                child: Column(
-                  children: [
-                    const IconButton(
-                      onPressed: null,
-                      icon: Icon(Icons.favorite),
-                    ),
-                    Text('Prof. $index'),
-                  ],
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
               ),
             ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:mysample/lecture_info.dart';
-import 'package:mysample/lecture_model.dart';
+import 'package:mysample/pages/lecture/lecture_info.dart';
+import 'package:mysample/model/lecture_model.dart';
 import 'package:mysample/list_filter.dart';
 
 class LecturePage extends StatefulWidget {

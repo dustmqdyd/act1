@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:mysample/search.dart';
+import 'package:mysample/pages/search.dart';
 void main() {
   runApp(const MyApp());
 }

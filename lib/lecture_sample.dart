@@ -1,4 +1,4 @@
-import 'package:mysample/lecture_model.dart';
+import 'package:mysample/model/lecture_model.dart';
 
 List<LectureModel> sample = [
   // Sample lecture models
