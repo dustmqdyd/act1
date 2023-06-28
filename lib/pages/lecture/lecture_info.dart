@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:mysample/model/lecture_model.dart';
+import 'package:mysample/pages/lecture/lecture_professor.dart';
 
 class LectureInfo extends StatefulWidget {
   const LectureInfo(this.lecture, {super.key});
@@ -124,6 +125,12 @@ class _LectureInfoState extends State<LectureInfo> {
                     color: Colors.black,
                   ),
                   borderRadius: BorderRadius.circular(8.0),
+                ),
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LectureProfessor(widget.lecture),
+                  ),
                 ),
               ),
             ),

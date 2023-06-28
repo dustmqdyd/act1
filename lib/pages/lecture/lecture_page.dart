@@ -19,6 +19,7 @@ class _LecturePageState extends State<LecturePage> {
     List filteredList;
     int initialPage;
     (filteredList, initialPage) = filter(widget.lecture);
+
     return Scaffold(
       body: SafeArea(
         child: PageView.builder(

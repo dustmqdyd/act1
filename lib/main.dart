@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:mysample/pages/search.dart';
+import 'package:mysample/pages/table.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -18,24 +20,29 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        useMaterial3: true,
-      ),
       home: Scaffold(
         body: SafeArea(
-            child: const [
-          // Select pages as _currentPageIndex changes
-          Center(
-            child: Text('Home'),
-          ),
-          Center(
-            child: Text('Timetable'),
-          ),
-          SearchPage(),
-          Center(
-            child: Text('More'),
-          )
-        ][_currentPageIndex]),
+          child: const [
+            // Select pages as _currentPageIndex changes
+            Center(
+              child: Text('Home'),
+            ),
+            TimetableScreen(),
+            SearchPage(),
+            Center(
+              child: Text('More'),
+            )
+          ][_currentPageIndex],
+        ),
+        floatingActionButton: _currentPageIndex == 1
+            ? FloatingActionButton.extended(
+                onPressed: () => null,
+                icon: Icon(
+                  Icons.add,
+                ),
+                label: const Text('Add Lecture'),
+              )
+            : null,
         bottomNavigationBar: NavigationBar(
           selectedIndex: _currentPageIndex,
           destinations: const <NavigationDestination>[
