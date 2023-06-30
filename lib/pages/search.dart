@@ -14,24 +14,24 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   static List<LectureModel> tileList = sample;
 
-  Iterable<Widget> getSuggestions(SearchController controller) {
-    final String input = controller.value.text;
+  // Iterable<Widget> getSuggestions(SearchController controller) {
+  //   final String input = controller.value.text;
 
-    return tileList
-        .where(
-          (element) => element.lectureName.toLowerCase().contains(
-                input.toLowerCase(),
-              ),
-        )
-        .map(
-          (e) => ListTile(
-            title: Text(e.lectureName),
-            subtitle: Text(
-              e.lectureNumber.toString(),
-            ),
-          ),
-        );
-  }
+  //   return tileList
+  //       .where(
+  //         (element) => element.lectureName.toLowerCase().contains(
+  //               input.toLowerCase(),
+  //             ),
+  //       )
+  //       .map(
+  //         (e) => ListTile(
+  //           title: Text(e.lectureName),
+  //           subtitle: Text(
+  //             e.lectureNumber.toString(),
+  //           ),
+  //         ),
+  //       );
+  // }
 
   void updateList(String value) {
     setState(() {

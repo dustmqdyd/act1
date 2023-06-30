@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mysample/lecture_sample.dart';
+import 'package:mysample/model/lecture_model.dart';
+import 'package:mysample/pages/lecture/lecture_page.dart';
 
 class TimetableScreen extends StatefulWidget {
   const TimetableScreen({super.key});
@@ -8,6 +11,8 @@ class TimetableScreen extends StatefulWidget {
 }
 
 class _TimetableScreenState extends State<TimetableScreen> {
+  static List<LectureModel> tileList = sample;
+
   final List<String> daysOfWeek = [
     'Mon',
     'Tue',
@@ -28,100 +33,182 @@ class _TimetableScreenState extends State<TimetableScreen> {
 
   Map<String, Map<String, String>> timetableData = {};
 
+  void updateList(String value) {
+    setState(() {
+      var intValue = int.tryParse(value);
+
+      if (intValue == null) {
+        tileList = sample
+            .where((element) =>
+                element.lectureName.toLowerCase().contains(value.toLowerCase()))
+            .toList();
+      } else {
+        tileList = sample
+            .where((element) => element.lectureNumber
+                .toString()
+                .toLowerCase()
+                .contains(value.toLowerCase()))
+            .toList();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        side: const BorderSide(
-          color: Colors.grey,
+    return Stack(
+      children: [
+        Card(
+          shape: RoundedRectangleBorder(
+            side: const BorderSide(
+              color: Colors.grey,
+            ),
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          child: Column(
+            children: [
+              const Padding(
+                padding: EdgeInsets.all(20.0),
+                child: Row(
+                  children: [
+                    Text(
+                      '2023 - 1st Semester',
+                      style: TextStyle(
+                        fontSize: 30.0,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Row(
+                children: [
+                  // Empty space for time range column
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      alignment: Alignment.center,
+                      color: Colors.grey[300],
+                      child: const Text('Mon'),
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      alignment: Alignment.center,
+                      color: Colors.grey[300],
+                      child: const Text('Tue'),
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      alignment: Alignment.center,
+                      color: Colors.grey[300],
+                      child: const Text('Wed'),
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      alignment: Alignment.center,
+                      color: Colors.grey[300],
+                      child: const Text('Thu'),
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      alignment: Alignment.center,
+                      color: Colors.grey[300],
+                      child: const Text('Fri'),
+                    ),
+                  ),
+                ],
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: timeRanges.length,
+                  itemBuilder: (context, index) {
+                    final timeRange = timeRanges[index];
+                    return Row(
+                      children: [
+                        for (var day in daysOfWeek)
+                          Expanded(
+                            child: Container(
+                              padding: const EdgeInsets.all(8),
+                              alignment: Alignment.center,
+                              child: timetableData.containsKey(day) &&
+                                      timetableData[day]!.containsKey(timeRange)
+                                  ? Text(timetableData[day]![timeRange]!)
+                                  : null,
+                            ),
+                          ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
-        borderRadius: BorderRadius.circular(8.0),
-      ),
-      child: Column(
-        children: [
-          const Padding(
-            padding: EdgeInsets.all(20.0),
-            child: Row(
+        DraggableScrollableSheet(
+          initialChildSize: 0.12,
+          minChildSize: 0.1,
+          builder: (context, scrollController) => Material(
+            color: Colors.amber,
+            borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(20.0),
+            ),
+            child: Column(
               children: [
-                Text(
-                  '2023 - 1st Semester',
-                  style: TextStyle(
-                    fontSize: 30.0,
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    color: Colors.grey,
+                    width: 30,
+                    height: 5,
+                  ),
+                ),
+                TextField(
+                  onChanged: (value) => updateList(value),
+                  decoration: const InputDecoration(
+                    hintText: 'Search lecture',
+                    prefixIcon: Icon(
+                      Icons.search,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemBuilder: (context, index) => ListTile(
+                      leading: CircleAvatar(
+                        backgroundColor: tileList[index].isCompulsory
+                            ? Colors.red
+                            : Colors.blue,
+                      ),
+                      title: Text(
+                        '${tileList[index].lectureName} (${tileList[index].year})',
+                      ),
+                      subtitle: Text(
+                        tileList[index].lectureNumber.toString(),
+                      ),
+                      trailing: const IconButton(
+                        onPressed: null,
+                        icon: Icon(Icons.favorite_border),
+                      ),
+                      onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => LecturePage(tileList[index]),
+                          )),
+                    ),
+                    itemCount: tileList.length,
                   ),
                 ),
               ],
             ),
           ),
-          Row(
-            children: [
-              // Empty space for time range column
-              Expanded(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  alignment: Alignment.center,
-                  color: Colors.grey[300],
-                  child: const Text('Mon'),
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  alignment: Alignment.center,
-                  color: Colors.grey[300],
-                  child: const Text('Tue'),
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  alignment: Alignment.center,
-                  color: Colors.grey[300],
-                  child: const Text('Wed'),
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  alignment: Alignment.center,
-                  color: Colors.grey[300],
-                  child: const Text('Thu'),
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  alignment: Alignment.center,
-                  color: Colors.grey[300],
-                  child: const Text('Fri'),
-                ),
-              ),
-            ],
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: timeRanges.length,
-              itemBuilder: (context, index) {
-                final timeRange = timeRanges[index];
-                return Row(
-                  children: [
-                    for (var day in daysOfWeek)
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.all(8),
-                          alignment: Alignment.center,
-                          child: timetableData.containsKey(day) &&
-                                  timetableData[day]!.containsKey(timeRange)
-                              ? Text(timetableData[day]![timeRange]!)
-                              : null,
-                        ),
-                      ),
-                  ],
-                );
-              },
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
