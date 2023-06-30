@@ -124,4 +124,84 @@ class _TimetableScreenState extends State<TimetableScreen> {
       ),
     );
   }
+
+  void _addTimetableItem(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        String selectedDay = daysOfWeek[0];
+        String selectedTimeRange = timeRanges[0];
+        TextEditingController textEditingController = TextEditingController();
+
+        return AlertDialog(
+          title: Text('Add Timetable Item'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              DropdownButtonFormField<String>(
+                value: selectedDay,
+                items: daysOfWeek.map((day) {
+                  return DropdownMenuItem<String>(
+                    value: day,
+                    child: Text(day),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    selectedDay = value!;
+                  });
+                },
+              ),
+              SizedBox(height: 16),
+              DropdownButtonFormField<String>(
+                value: selectedTimeRange,
+                items: timeRanges.map((range) {
+                  return DropdownMenuItem<String>(
+                    value: range,
+                    child: Text(range),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    selectedTimeRange = value!;
+                  });
+                },
+              ),
+              SizedBox(height: 16),
+              TextFormField(
+                controller: textEditingController,
+                decoration: InputDecoration(
+                  labelText: 'Timetable Item',
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                final item = textEditingController.text;
+                if (item.isNotEmpty) {
+                  setState(() {
+                    if (!timetableData.containsKey(selectedDay)) {
+                      timetableData[selectedDay] = {};
+                    }
+                    timetableData[selectedDay]![selectedTimeRange] = item;
+                  });
+                  Navigator.of(context).pop();
+                }
+              },
+              child: Text('Add'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }

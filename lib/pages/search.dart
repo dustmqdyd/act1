@@ -35,7 +35,17 @@ class _SearchPageState extends State<SearchPage> {
 
   void updateList(String value) {
     setState(() {
-      tileList = sample.where((element) => element.lectureName.toLowerCase().contains(value.toLowerCase())).toList();
+      var intValue = int.tryParse(value);
+
+      if (intValue == null) {
+        tileList = sample
+            .where((element) =>
+                element.lectureName.toLowerCase().contains(value.toLowerCase()))
+            .toList();
+      } else {
+        tileList =
+            sample.where((element) => element.lectureNumber.toString().toLowerCase().contains(value.toLowerCase())).toList();
+      }
     });
   }
 

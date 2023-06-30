@@ -34,15 +34,16 @@ class _MyAppState extends State<MyApp> {
             )
           ][_currentPageIndex],
         ),
-        floatingActionButton: _currentPageIndex == 1
-            ? FloatingActionButton.extended(
-                onPressed: () => null,
-                icon: Icon(
-                  Icons.add,
-                ),
-                label: const Text('Add Lecture'),
-              )
-            : null,
+        // FAB can't work with bottom sheet -> FAB always shows on screen. Maybe..
+        // floatingActionButton: _currentPageIndex == 1
+        //     ? FloatingActionButton.extended(
+        //         onPressed: () => null,
+        //         icon: const Icon(
+        //           Icons.add,
+        //         ),
+        //         label: const Text('Add lecture'),
+        //       )
+        //     : null,
         bottomNavigationBar: NavigationBar(
           selectedIndex: _currentPageIndex,
           destinations: const <NavigationDestination>[
