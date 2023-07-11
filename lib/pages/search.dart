@@ -43,8 +43,12 @@ class _SearchPageState extends State<SearchPage> {
                 element.lectureName.toLowerCase().contains(value.toLowerCase()))
             .toList();
       } else {
-        tileList =
-            sample.where((element) => element.lectureNumber.toString().toLowerCase().contains(value.toLowerCase())).toList();
+        tileList = sample
+            .where((element) => element.lectureNumber
+                .toString()
+                .toLowerCase()
+                .contains(value.toLowerCase()))
+            .toList();
       }
     });
   }
@@ -75,31 +79,32 @@ class _SearchPageState extends State<SearchPage> {
           ),
         ),
 
-        SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) => ListTile(
-              leading: CircleAvatar(
-                backgroundColor:
-                    tileList[index].isCompulsory ? Colors.red : Colors.blue,
-              ),
-              title: Text(
-                '${tileList[index].lectureName} (${tileList[index].year})',
-              ),
-              subtitle: Text(
-                tileList[index].lectureNumber.toString(),
-              ),
-              trailing: const IconButton(
-                onPressed: null,
-                icon: Icon(Icons.favorite_border),
-              ),
-              onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => LecturePage(tileList[index]),
-                  )),
+        SliverList.separated(
+          itemBuilder: (context, index) => ListTile(
+            leading: CircleAvatar(
+              backgroundColor:
+                  tileList[index].isCompulsory ? Colors.red : Colors.blue,
             ),
-            childCount: tileList.length,
+            title: Text(
+              '${tileList[index].lectureName} (${tileList[index].year})',
+            ),
+            subtitle: Text(
+              tileList[index].lectureNumber.toString(),
+            ),
+            trailing: const IconButton(
+              onPressed: null,
+              icon: Icon(Icons.favorite_border),
+            ),
+            onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => LecturePage(tileList[index]),
+                )),
           ),
+          separatorBuilder: (context, index) => Divider(
+            color: Colors.grey[600],
+          ),
+          itemCount: tileList.length,
         ),
       ],
     );

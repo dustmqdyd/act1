@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mysample/lecture_sample.dart';
 import 'package:mysample/model/lecture_model.dart';
-import 'package:mysample/pages/lecture/lecture_page.dart';
+import 'package:mysample/timetable.dart';
 
 class TimetableScreen extends StatefulWidget {
   const TimetableScreen({super.key});
@@ -11,7 +11,9 @@ class TimetableScreen extends StatefulWidget {
 }
 
 class _TimetableScreenState extends State<TimetableScreen> {
+  double _sheetSize = 0.17;
   static List<LectureModel> tileList = sample;
+  bool _isSheetVisible = false;
 
   final List<String> daysOfWeek = [
     'Mon',
@@ -64,14 +66,14 @@ class _TimetableScreenState extends State<TimetableScreen> {
             ),
             borderRadius: BorderRadius.circular(8.0),
           ),
-          child: Column(
+          child: const Column(
             children: [
-              const Padding(
+              Padding(
                 padding: EdgeInsets.all(20.0),
                 child: Row(
                   children: [
                     Text(
-                      '2023 - 1st Semester',
+                      '2023 - Spring Semester',
                       style: TextStyle(
                         fontSize: 30.0,
                       ),
@@ -79,216 +81,121 @@ class _TimetableScreenState extends State<TimetableScreen> {
                   ],
                 ),
               ),
-              Row(
+              SingleChildScrollView(
+                child: Stack(
+                  children: [
+                    TimeTable(),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton.icon(
+              onPressed: () {
+                setState(() {
+                  _isSheetVisible = true;
+                });
+              },
+              icon: const Icon(Icons.add),
+              label: const Text('Add lecture'),
+            ),
+          ),
+        ),
+        if (_isSheetVisible)
+          DraggableScrollableSheet(
+            initialChildSize: _sheetSize,
+            minChildSize: 0.17,
+            maxChildSize: 0.8,
+            builder: (context, scrollController) => Material(
+              color: Colors.white,
+              shape: const RoundedRectangleBorder(
+                side: BorderSide(color: Colors.grey),
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(20.0),
+                ),
+              ),
+              child: Column(
                 children: [
-                  // Empty space for time range column
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      alignment: Alignment.center,
-                      color: Colors.grey[300],
-                      child: const Text('Mon'),
+                  Stack(
+                    children: [
+                      Center(
+                        child: GestureDetector(
+                          onVerticalDragUpdate: (details) {
+                            setState(() {
+                              _sheetSize -= details.delta.dy /
+                                  MediaQuery.of(context).size.height;
+                              _sheetSize = _sheetSize.clamp(0.17, 0.8);
+                            });
+                          },
+                          child: const Padding(
+                            padding: EdgeInsets.all(6.0),
+                            child: Icon(
+                              Icons.drag_handle,
+                              size: 30.0,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        right: 0.0,
+                        child: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _isSheetVisible = false;
+                            });
+                          },
+                          icon: const Icon(Icons.close),
+                        ),
+                      ),
+                    ],
+                  ),
+                  TextField(
+                    onChanged: (value) => updateList(value),
+                    decoration: const InputDecoration(
+                      hintText: 'Search lecture',
+                      prefixIcon: Icon(
+                        Icons.search,
+                      ),
                     ),
                   ),
                   Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      alignment: Alignment.center,
-                      color: Colors.grey[300],
-                      child: const Text('Tue'),
-                    ),
-                  ),
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      alignment: Alignment.center,
-                      color: Colors.grey[300],
-                      child: const Text('Wed'),
-                    ),
-                  ),
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      alignment: Alignment.center,
-                      color: Colors.grey[300],
-                      child: const Text('Thu'),
-                    ),
-                  ),
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      alignment: Alignment.center,
-                      color: Colors.grey[300],
-                      child: const Text('Fri'),
+                    child: ListView.separated(
+                      itemBuilder: (context, index) => ListTile(
+                        leading: CircleAvatar(
+                          backgroundColor: tileList[index].isCompulsory
+                              ? Colors.red
+                              : Colors.blue,
+                        ),
+                        title: Text(
+                          '${tileList[index].lectureName} (${tileList[index].year})',
+                        ),
+                        subtitle: Text(
+                          tileList[index].lectureNumber.toString(),
+                        ),
+                        trailing: const IconButton(
+                          onPressed: null,
+                          icon: Icon(Icons.favorite_border),
+                        ),
+
+                        //Need to change
+                        onTap: () => {},
+                      ),
+                      separatorBuilder: (context, index) => Divider(
+                        color: Colors.grey[700],
+                      ),
+                      itemCount: tileList.length,
                     ),
                   ),
                 ],
               ),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: timeRanges.length,
-                  itemBuilder: (context, index) {
-                    final timeRange = timeRanges[index];
-                    return Row(
-                      children: [
-                        for (var day in daysOfWeek)
-                          Expanded(
-                            child: Container(
-                              padding: const EdgeInsets.all(8),
-                              alignment: Alignment.center,
-                              child: timetableData.containsKey(day) &&
-                                      timetableData[day]!.containsKey(timeRange)
-                                  ? Text(timetableData[day]![timeRange]!)
-                                  : null,
-                            ),
-                          ),
-                      ],
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
-        DraggableScrollableSheet(
-          initialChildSize: 0.12,
-          minChildSize: 0.1,
-          builder: (context, scrollController) => Material(
-            color: Colors.amber,
-            borderRadius: const BorderRadius.vertical(
-              top: Radius.circular(20.0),
-            ),
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    color: Colors.grey,
-                    width: 30,
-                    height: 5,
-                  ),
-                ),
-                TextField(
-                  onChanged: (value) => updateList(value),
-                  decoration: const InputDecoration(
-                    hintText: 'Search lecture',
-                    prefixIcon: Icon(
-                      Icons.search,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    itemBuilder: (context, index) => ListTile(
-                      leading: CircleAvatar(
-                        backgroundColor: tileList[index].isCompulsory
-                            ? Colors.red
-                            : Colors.blue,
-                      ),
-                      title: Text(
-                        '${tileList[index].lectureName} (${tileList[index].year})',
-                      ),
-                      subtitle: Text(
-                        tileList[index].lectureNumber.toString(),
-                      ),
-                      trailing: const IconButton(
-                        onPressed: null,
-                        icon: Icon(Icons.favorite_border),
-                      ),
-                      onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => LecturePage(tileList[index]),
-                          )),
-                    ),
-                    itemCount: tileList.length,
-                  ),
-                ),
-              ],
             ),
           ),
-        ),
       ],
-    );
-  }
-
-  void _addTimetableItem(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        String selectedDay = daysOfWeek[0];
-        String selectedTimeRange = timeRanges[0];
-        TextEditingController textEditingController = TextEditingController();
-
-        return AlertDialog(
-          title: Text('Add Timetable Item'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              DropdownButtonFormField<String>(
-                value: selectedDay,
-                items: daysOfWeek.map((day) {
-                  return DropdownMenuItem<String>(
-                    value: day,
-                    child: Text(day),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    selectedDay = value!;
-                  });
-                },
-              ),
-              SizedBox(height: 16),
-              DropdownButtonFormField<String>(
-                value: selectedTimeRange,
-                items: timeRanges.map((range) {
-                  return DropdownMenuItem<String>(
-                    value: range,
-                    child: Text(range),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    selectedTimeRange = value!;
-                  });
-                },
-              ),
-              SizedBox(height: 16),
-              TextFormField(
-                controller: textEditingController,
-                decoration: InputDecoration(
-                  labelText: 'Timetable Item',
-                ),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                final item = textEditingController.text;
-                if (item.isNotEmpty) {
-                  setState(() {
-                    if (!timetableData.containsKey(selectedDay)) {
-                      timetableData[selectedDay] = {};
-                    }
-                    timetableData[selectedDay]![selectedTimeRange] = item;
-                  });
-                  Navigator.of(context).pop();
-                }
-              },
-              child: Text('Add'),
-            ),
-          ],
-        );
-      },
     );
   }
 }

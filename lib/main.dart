@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
 import 'package:mysample/pages/search.dart';
 import 'package:mysample/pages/table.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.android,
+  );
   runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  const MyApp({super.key}); 
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -34,16 +41,6 @@ class _MyAppState extends State<MyApp> {
             )
           ][_currentPageIndex],
         ),
-        // FAB can't work with bottom sheet -> FAB always shows on screen. Maybe..
-        // floatingActionButton: _currentPageIndex == 1
-        //     ? FloatingActionButton.extended(
-        //         onPressed: () => null,
-        //         icon: const Icon(
-        //           Icons.add,
-        //         ),
-        //         label: const Text('Add lecture'),
-        //       )
-        //     : null,
         bottomNavigationBar: NavigationBar(
           selectedIndex: _currentPageIndex,
           destinations: const <NavigationDestination>[

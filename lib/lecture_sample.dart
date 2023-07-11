@@ -14,7 +14,7 @@ List<LectureModel> sample = [
       2019, 2, 1, 'Fundamental Project Practice', 5111053, false, 2, 0, 5111084),
   LectureModel(
       2019, 2, 2, 'Principles of Programming Languages', 5111011, true, 3),
-  LectureModel(2019, 2, 2, 'Algorithms', 511022, true, 3),
+  LectureModel(2019, 2, 2, 'Algorithms', 5111022, true, 3),
   LectureModel(2019, 2, 2, 'Systems Programming', 5111012, false, 3),
   LectureModel(2019, 2, 2, 'HCI Programming', 5111014, false, 3),
   LectureModel(2019, 2, 2, 'Preparations of Future Design II', 5111054, false,
@@ -33,7 +33,7 @@ List<LectureModel> sample = [
       2020, 2, 1, 'Implementation of Future Design', 5111083, false, 1, 5111052),
   LectureModel(2020, 2, 1, 'Fundamental of Open Source SW Project', 5111084,
       false, 2, 5111053),
-  LectureModel(2020, 2, 2, 'Algorithm', 5111022, true, 3),
+  LectureModel(2020, 2, 2, 'Algorithms', 5111022, true, 3),
   LectureModel(
       2020, 2, 2, 'Principles of Programming Languages', 5111011, false, 3),
   LectureModel(2020, 2, 2, 'Systems Programming', 5111012, false, 3),
